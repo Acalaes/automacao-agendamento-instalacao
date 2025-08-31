@@ -1,0 +1,162 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Solicite uma Instalação",
+        "formDescription": "Preencha este formulario para requisitar uma instalação. Nós enviaremos um email para finalizar o agendamento.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "E-MAIL",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Data de preferência para Instalação",
+              "fieldType": "date"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        32,
+        0
+      ],
+      "id": "ccc2bf86-5920-4aa9-8f97-37a0a4242e14",
+      "name": "On form submission",
+      "webhookId": "51f16148-bc91-4758-8c83-33cd5fd1f851"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "48947e95-2e32-43ed-81a1-bb66fbace050",
+              "leftValue": "={{ $json['Data de preferência para Instalação'].toDateTime() }}",
+              "rightValue": "={{ $now.plus(7, \"days\") }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "beforeOrEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "dc17c09b-e603-46ea-8237-4bb5ffa70afe",
+      "name": "Esta dentro de 7 dias?"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        496,
+        144
+      ],
+      "id": "e11062c5-64a4-4125-8ac9-e28ed9139f7c",
+      "name": "Fazer"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09CUBPFN3Y",
+          "mode": "list",
+          "cachedResultName": "social"
+        },
+        "text": "=Nova instalação requisitada (dentro de 7 dias).\nEmail de contato:{{ $('On form submission').item.json['E-MAIL'] }}\nData de instação preferida: {{ $json['Data de preferência para Instalação'] }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        496,
+        -96
+      ],
+      "id": "91d2e2a5-b008-4fe4-afee-8ffdd83eae41",
+      "name": "Send a message",
+      "webhookId": "68c49186-0534-46bf-93b7-4619f56bd6ce",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "48WAPVcc4j491Wt8",
+          "name": "Slack account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "E-MAIL": "acalaes@outlook.com",
+          "Data de preferência para Instalação": "2025-09-01",
+          "submittedAt": "2025-08-30T20:21:27.332-03:00",
+          "formMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Esta dentro de 7 dias?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Esta dentro de 7 dias?": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fazer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "01d88ad8-5dc2-4b50-ad4f-1ec021622dc5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "632a0f85e373061c2826b23d542dacd832db90da3deac84a1df7c50d8daf2d70"
+  },
+  "id": "Xvx5VUOIdn9xxKAU",
+  "tags": []
+}
