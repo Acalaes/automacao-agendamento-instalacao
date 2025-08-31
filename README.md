@@ -43,4 +43,4 @@ A estrutura atual permite expansões futuras, como:
 
 ## Propriedade Intelectual
 
-Este software foi desenvolvido por [Seu Nome/Nome da Sua Empresa]. O histórico de versões e o resumo hash de cada alteração estão registrados nos commits deste repositório Git, servindo como prova de anterioridade para fins de registro de propriedade intelectual junto ao INPI.
+Este software foi desenvolvido por Alexandre P Calaes. O histórico de versões e o resumo hash de cada alteração estão registrados nos commits deste repositório Git, servindo como prova de anterioridade para fins de registro de propriedade intelectual junto ao INPI.
